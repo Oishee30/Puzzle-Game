@@ -18,10 +18,12 @@
 <button onclick="up(-1)">Left</button>
 <button onclick="up(1)">Right</button>
 <button onclick="newPic()">Get New Picture</button>
+<button onclick="astar1()">Predict Next Move</button>
 <p id="demo"></p>
 </div>
 
  <script src="coordinates.js"></script>
+  <script src="aStar.js"></script>
 <script>
 /* Vertex Shader Code */
 
@@ -62,6 +64,16 @@ var fragmentShaderSource =
             gl_FragColor = color;
             }`;
 
+function astar1()
+{
+         level = 0;
+        aStar(allCorPos);
+	    document.getElementById("demo").innerHTML = first;
+		
+	    up(first);
+	   
+
+}
 			
 function drawC()
 {
@@ -94,7 +106,7 @@ var textureObject;
 var bufferInd;
 var uniformRotateMatY;
 var uniformAnyMatrix;
-var cur = 15;
+var cur = 0;
 var allCorPos = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
 var eval = [1,3,4,2,3,1,3,4,2,1,1,3,4,2,3,1,3,1,2,4]
 var q = 0;
@@ -123,13 +135,13 @@ function rotate()
 }
 function newPic()
 {
-
+   
    var myVar = setInterval(rotate ,100);
    if(theta >= 360)
    {
       clearInterval(myVar);
 	  theta = 5;
-   texCoords = coords2.slice();
+   texCoords = texCoordsB.slice();
    drawC();
    textureObject = gl.createTexture();
    loadTexture( picture[picV], textureObject );
@@ -145,8 +157,9 @@ function newPic()
 function reshuffle()
 {
 
-   cur = 15;
-   texCoords = coords2.slice();
+   cur = 0;
+   texCoords = texCoordsB.slice();
+   allCorPos = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
    drawC();
 //   gl.enable(gl.DEPTH_TEST);
  //  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -437,7 +450,7 @@ function initGL() {
 		  if(q == 8)
 	{
 	   q = 0;
-	   cur = 15;
+	   cur = 0;
 	
 	}
 		  q++;
